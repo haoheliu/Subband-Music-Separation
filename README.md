@@ -10,6 +10,8 @@ This is a system for voice and accompaniment separation model training. All you 
 
   ...
 
+![subband](./pics/subband.png)
+
 ## Quick start
 
 - First we configure the code running environments
@@ -46,7 +48,7 @@ This is a system for voice and accompaniment separation model training. All you 
 
   - Configure pretrained model path (Already done in config_demo_pretrained.json)
 
-    - ```json
+    - ```
       "PRE-TRAINED": {
         "start_point": 155700,
         "load_model_path": "./checkpoints/1_2020_5_8_MDenseNetspleeter_sf0_l1_l2_l3__BD_False_lr001_bs16-1_fl1.5_ss4500.0_87lnu4fshift8flength32drop0.1split_bandTrue_8"
@@ -71,7 +73,7 @@ This is a system for voice and accompaniment separation model training. All you 
 
   - Do configuration like this:
 
-    ```json
+    ```
         "additional_data": {
           "additional_vocal_path": ["addtional_data/accompaniment_list1.txt",
                                     "addtional_data/accompaniment_list2.txt"], // or more
@@ -84,7 +86,7 @@ This is a system for voice and accompaniment separation model training. All you 
 
 - **Try different kind of Channel-wise subband inputs**
 
-  - ```json
+  - ```
     "SUBBAND": {
       "number": 8 // you can also choose 1(no cws),2,4
     },
@@ -94,7 +96,7 @@ This is a system for voice and accompaniment separation model training. All you 
 
 You just need to mofidy the configuration file to personalize your experiment. This section I will lead you around the variable inside the configuration file.
 
-```json
+```
 {
   "LOG": {
     "show_model_structure": 1, // 1: print model structure; 0: not print
@@ -149,6 +151,12 @@ You just need to mofidy the configuration file to personalize your experiment. T
 - We will save model in "saved_modes/"
 - We will save separation results in output 
 - The wav files inside "evaluate/listener_todo" are considered songs to be splitted. (separation_util.py: SeparationUtil.split_listener())
+
+## About Channel-wise Subband (CWS) input
+
+![tab2](./pics/tab2.png)
+
+![tab3-sota](./pics/tab3-sota.png)
 
 ## Citation
 

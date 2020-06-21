@@ -24,8 +24,12 @@ def before_forward_f(
     '''
     This function can only be used in frequency domain
     Args:
-        subband: Choice for splitting subband
         *args: multiple raw wave inputs, format: [batchsize,channels,wave],value:[-32767,32767]
+        device: torch.device
+        subband_num: int, subband number to split:[2,4,8]
+        sample_rate: int, default 44100
+        normalize: if true the value of the output will be normalized to [-1,1]
+
     Returns:
         For each raw wave inputs, return a list with the same order as inputs
     '''
@@ -82,15 +86,19 @@ def after_forward_f(
         normalized = True
 ):
     '''
-    This function can only be used in frequency domain
-    Args:
-        subband: Choice for splitting subband
-        *args: Arbitrary number of input, format:
-            if(subband):[batchsize,subband_num*2*2,frequency_bin,time_step]
-            if(not subband):[batchsize,4,frequency_bin,time_step]
-    Returns:
-        A list of reconstructed raw waves
-    '''
+        This function can only be used in frequency domain
+        Args:
+            *args: Arbitrary number of input, format:
+                if(subband):[batchsize,subband_num*2*2,frequency_bin,time_step]
+                if(not subband):[batchsize,4,frequency_bin,time_step]
+            device: torch.device
+            subband_num: int, subband number to split:[2,4,8]
+            sample_rate: int, default 44100
+            normalize: if true the value of the output will be normalized to [-1,1]
+
+        Returns:
+            A list of reconstructed raw waves
+        '''
     def split_channels(data):
         data = data.permute(0,2,3,1)
         res = None

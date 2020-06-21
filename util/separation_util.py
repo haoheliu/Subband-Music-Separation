@@ -6,14 +6,14 @@ import sys
 import musdb
 import logging
 sys.path.append("..")
+from models import dedicated
 from util import wave_util
 from util.data_util import write_json,save_pickle,load_json
 from util.subband.subband_util import before_forward_f,after_forward_f
 from evaluate.museval.evaluate_track import eval_mus_track
 
 class SeparationUtil:
-    def __init__(self, load_model_pth="",
-                 start_point = 0,
+    def __init__(self, model,
                  device = torch.device('cpu'),
                  project_root = "",
                  trail_name = "temp",
@@ -21,25 +21,26 @@ class SeparationUtil:
                  split_band = 1,
                  sample_rate = 44100,
                  ):
-        if (type(load_model_pth) == type("")):
-            if(start_point == 0):
-                print("Warning: Start point is 0")
-            self.model_name = load_model_pth.split("/")[-1]
-            self.start_point = start_point
-            model_pth = load_model_pth +"/model" + str(start_point) + ".pkl"
-            print("Load model from " + model_pth)
-            self.model = torch.load(model_pth, map_location=device)
-            print("done")
-        else:
-            self.model_name = trail_name
-            self.model = load_model_pth
-            self.start_point = self.model.cnt
+        '''
+        Args:
+            model: model object, defined in model.dedicated.dedicated_model
+            device: torch.device, cpu or cuda:n
+            project_root: str, root path to this project
+            trail_name: str, name alias of this experiment/ model
+            MUSDB_PATH: str, root path to MUSDB18 dataset
+            split_band: int, how many subband to split
+            sample_rate: int, default 44100
+        '''
         self.project_root = project_root
         self.MUSDB_PATH = MUSDB_PATH
         self.sample_rate = sample_rate
         self.split_band = split_band
         self.wh = wave_util.WaveHandler()
         self.device = device
+        self.model_name = trail_name
+        self.model = model
+        self.start_point = self.model.cnt
+        # end else
         self.start = []
         self.end = []
         self.realend = []
@@ -61,7 +62,6 @@ class SeparationUtil:
         return audio[int(length*portion_start):int(length*portion_end),...]
 
     def pre_pro(self,tensor: torch.Tensor):
-        # move channel axis to the second dimension
         if(len(tensor.size()) <= 2):
             tensor = tensor.unsqueeze(0)
         assert len(tensor.size()) == 3
@@ -69,13 +69,19 @@ class SeparationUtil:
         else: return tensor.permute(0, 2, 1).float()
 
     def post_pro(self,arr:np.array,real_length):
-        # torch.Size([1, 2, 8842944])
         if(len(arr.shape)>2):
             arr = arr[0,...]
-        arr = np.transpose(arr,(1,0)) # [raw_wav,channels]
+        arr = np.transpose(arr,(1,0))
         return arr[:real_length,...]
 
     def validate(self,previous_loss):
+        '''
+        Args:
+            previous_loss: tuple, previously the best loss value
+
+        Returns:
+            tuple, Validation loss value
+        '''
         self.mus = musdb.DB(self.MUSDB_PATH, is_wav=True, subsets='train',split='valid')
         loss = torch.nn.L1Loss()
         conf = load_json(self.project_root+"config/json/"+self.model_name+".json")
@@ -86,8 +92,8 @@ class SeparationUtil:
         with torch.no_grad():
             for track in self.mus:
                 print(track.name)
-                if("Alexander Ross - Goodbye Bolero" in track.name): # todo this song is broken on my server
-                    continue
+                # if("Alexander Ross - Goodbye Bolero" in track.name): # todo this song is broken on my server
+                #     continue
                 bac = track.targets['accompaniment'].audio
                 voc = track.targets['vocals'].audio
                 for i in range(len(self.start)):
@@ -119,8 +125,9 @@ class SeparationUtil:
         if(ret[0]/previous_loss[0] < decrease_ratio or ret[1]/previous_loss[1] < decrease_ratio):
             try:
                 print("Save model")
-                torch.save(self.model, self.project_root+"saved_models/" + self.model_name + "/model" + str(self.model.cnt) + ".pkl")
+                torch.save(self.model.state_dict(), self.project_root+"saved_models/" + self.model_name + "/model" + str(self.model.cnt) + ".pth")
                 self.evaluate(save_wav=True,save_json=True)
+                self.split_listener()
                 return ret
             except Exception as e:
                 logging.exception(e)
@@ -131,14 +138,10 @@ class SeparationUtil:
 
     def evaluate(self, save_wav=True,save_json=True):
         '''
-        Do evaluation on musdb dataset
+        Do evaluation on MUSDB18 test set
         Args:
-            save_wav: Whether to save the hole separation results
-            save_json: Whether to save the metrics evaluation result (json file)
-            split_band: Whether to use subband input
-            test_mode: test the hole system
-        Returns:
-            None
+            save_wav: boolean,
+            save_json: boolean, save result json
         '''
         def __fm(num):
             return format(num,".2f")
@@ -253,8 +256,15 @@ class SeparationUtil:
               save=True,
               fname="temp",
               save_path="",
-              scale=1.0,
               ):
+        '''
+        Split a single .wav file
+        Args:
+            track: str (path to wav) or musdb.audio_classes.MultiTrack
+            save: save result or not
+            save_path: path to save result
+            fname: name of this track
+        '''
         if (save_path[-1] != '/'):
             raise ValueError("Error: path should end with /")
         if(not os.path.exists(save_path)):
@@ -291,7 +301,7 @@ class SeparationUtil:
                     input_f = (input_f_vocals + input_f_background)
                     # Forward and mask
                     self.model.eval()
-                    for ch in range(self.model.channels):
+                    for ch in range(self.model.sources):
                         mask = self.model(ch, input_f)
                         data = mask * input_f * scale
                         if (ch == 0):
@@ -334,8 +344,13 @@ class SeparationUtil:
         print('time cost', end - start, 's')
         return background, vocal, origin_background, origin_vocal
 
-    def Split_listener(self,fname=None):
-        pth = self.project_root + "evaluate/raw_wave/",
+    def split_listener(self, fname=None):
+        '''
+        Split songs in "evaluate/listener_todo/" and save result in "outputs/listener/"
+        Args:
+            fname: optional, str, if not specified all songs in "evaluate/listener_todo/" will be splitted
+        '''
+        pth = self.project_root + "evaluate/listener_todo/"
         output_path = self.project_root + "outputs/listener/" + self.model_name + str(self.start_point) + "/"
         if (not os.path.exists(output_path)):
             os.mkdir(output_path)
@@ -350,5 +365,32 @@ class SeparationUtil:
             self.split(pth + each,
                        save=True,
                        save_path=output_path,
-                       fname=file,
-                       scale=1)
+                       fname=file)
+
+if __name__ == "__main__":
+    from config.mainConfig import Config
+    from models.dedicated import dedicated_model
+
+    if (Config.split_band):
+        inchannels = 4 * Config.subband
+        outchannels = 4 * Config.subband
+    else:
+        inchannels = outchannels = 4
+
+    model = dedicated_model(model_name=Config.model_name,
+                            device=Config.device,
+                            inchannels=inchannels,
+                            outchannels=outchannels,
+                            sources=2,
+                            drop_rate=Config.drop_rate)
+
+    model.load_state_dict(torch.load(os.path.join(Config.load_model_path,"model"+str(Config.start_point)+".pth")))
+    su = SeparationUtil(model=model,
+                        device=Config.device,
+                        MUSDB_PATH=Config.MUSDB18_PATH,
+                        split_band=Config.subband,
+                        sample_rate=Config.sample_rate,
+                        project_root=Config.project_root,
+                        trail_name="Demo code v1")
+
+    su.split_listener()

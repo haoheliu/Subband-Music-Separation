@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append("..")
-from models.dedicated import Spleeter
+from models.dedicated import dedicated_model
 from dataloader import dataloader
 from torch.utils.data import DataLoader
 from util.subband.subband_util import before_forward_f
@@ -11,8 +11,14 @@ from util.separation_util import SeparationUtil
 import logging
 import os
 from config.mainConfig import Config
+from config.global_tool import GlobalTool
 
-print("start")
+if(len(sys.argv) <= 1):
+    raise ValueError("Error: You must specify a config file, example: python xxx.py config_xxx.json")
+
+Config.refresh_configuration(sys.argv[1])
+GlobalTool.refresh_subband(Config.subband)
+
 if (not os.path.exists(Config.project_root + "saved_models/" + Config.trail_name)):
     os.mkdir(Config.project_root + "saved_models/" + Config.trail_name + "/")
     print("MakeDir: " + Config.project_root + "saved_models/" + Config.trail_name)
@@ -25,26 +31,30 @@ validate_score = (None, None)
 
 loss = torch.nn.L1Loss()
 
+if (Config.split_band):
+    inchannels = 4 * Config.subband
+    outchannels = 4 * Config.subband
+else:
+    inchannels = outchannels = 4
+model = dedicated_model(model_name=Config.model_name,
+                        device=Config.device,
+                        inchannels=inchannels,
+                        outchannels=outchannels,
+                        sources=2,
+                        drop_rate=Config.drop_rate)
+if (Config.use_gpu):
+    model = model.cuda(Config.device)
+
 # MODEL
 if (not Config.start_point == 0):
-    model = torch.load(Config.load_model_path + "/model" + str(Config.start_point) + ".pkl",
-                       map_location=Config.device)
-else:
-    if (Config.split_band):
-        inchannels = 4 * Config.subband
-        outchannels = 4 * Config.subband
-    else:
-        inchannels = outchannels = 4
-    model = Spleeter(model_name=Config.model_name,
-                     device=Config.device,
-                     inchannels=inchannels,
-                     outchannels=outchannels,
-                     sources=2,
-                     drop_rate=Config.drop_rate).cuda(Config.device)
+    print("Load model from ", Config.load_model_path + "/model" + str(Config.start_point) + ".pth")
+    model.load_state_dict(torch.load(Config.load_model_path + "/model" + str(Config.start_point) + ".pth"))
+    model.cnt = Config.start_point
 
-if(Config.print_model_struct):
-    print("Model structure: \n", model)
-print("Start from ", model.cnt, Config.model_name)
+if(Config.show_model_structure):
+    print(model)
+
+print("Start training from ", model.cnt, Config.model_name)
 
 # DATALOADER
 dl = torch.utils.data.DataLoader(
@@ -53,8 +63,8 @@ dl = torch.utils.data.DataLoader(
                                  num_worker=Config.num_workers,
                                  MUSDB18_PATH=Config.MUSDB18_PATH,
                                  BIG_DATA=Config.BIG_DATA,
-                                 additional_background_data=Config.background_data,
-                                 additional_vocal_data=Config.vocal_data
+                                 additional_background_data=Config.additional_accompaniment_data,
+                                 additional_vocal_data=Config.additional_vocal_data
                                  ),
     batch_size=Config.batch_size,
     shuffle=True,
@@ -68,7 +78,7 @@ scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=Config.step_siz
 
 def save_and_validate():
     global validate_score
-    su = SeparationUtil(load_model_pth=model,
+    su = SeparationUtil(model=model,
                         device=Config.device,
                         MUSDB_PATH=Config.MUSDB18_PATH,
                         split_band=Config.subband,
@@ -104,12 +114,12 @@ def train(  # Time Domain
 
     if ('l1' in Config.loss_component):
         output_track = []
-        for track_i in range(Config.channels):
+        for track_i in range(Config.sources):
             mask = model(track_i, gt_song)
             out = mask * gt_song
             output_track.append(out)
             # All tracks is done
-            if (track_i == Config.channels - 1):
+            if (track_i == Config.sources - 1):
                 # Preprocessing
                 output_track_sum = sum(output_track)
                 output_background = output_track[0]
@@ -135,7 +145,7 @@ def train(  # Time Domain
     else:
         freq_bac_loss, freq_voc_loss = 0, 0
         # An momory efficient version
-        for track_i in range(Config.channels):
+        for track_i in range(Config.sources):
             mask = model(track_i, gt_song)
             out = mask * gt_song
             if (track_i == 1):
@@ -153,37 +163,66 @@ def train(  # Time Domain
         freq_voc_loss_cache.append(freq_voc_loss)
 
 
-# TRAIN
-every_n = 10
-
 t0 = time.time()
 for epoch in range(Config.epoches):
     print("EPOCH: ", epoch)
     start = time.time()
-    pref = dataloader.data_prefetcher(dl,device=Config.device)
-    background, vocal, song, name = pref.next()
-    while background is not None:
-        if model.cnt % Config.validation_interval == 0 or model.cnt == Config.start_point:
-            save_and_validate()
-        if model.cnt % every_n == 0 or model.cnt == Config.start_point:
-            t1 = time.time()
-            print(str(model.cnt) +
-                  " Freq L1loss voc", format((sum(freq_voc_loss_cache[-every_n:]) / every_n) * 10000, '.7f'),
-                  " Freq L1loss bac", format((sum(freq_bac_loss_cache[-every_n:]) / every_n) * 10000, '.7f'),
-                  " Freq conserv-loss", format((sum(freq_cons_loss_cache[-every_n:]) / every_n) * 10000, '.7f'),
-                  " lr:", optimizer.param_groups[0]['lr'],
-                  " speed:", format((Config.frame_length * Config.batch_size) / (t1 - t0), '.2f'))
-            freq_voc_loss_cache = []
-            freq_bac_loss_cache = []
-            freq_cons_loss_cache = []
-        t0 = time.time()
-        train(
-            target_background=background,
-            target_vocal=vocal,
-            target_song=song)
+    if (Config.use_gpu):
+        pref = dataloader.data_prefetcher(dl, device=Config.device)
         background, vocal, song, name = pref.next()
-        if model.cnt > 100:
-            scheduler.step(1)
-        model.cnt += 1
-    end = time.time()
-    print("Epoch " + str(epoch) + " finish, total time: " + str(end - start))
+        while background is not None:
+            if model.cnt % Config.validation_interval == 0 and model.cnt != Config.start_point:
+                save_and_validate()
+            if model.cnt % Config.every_n == 0 and model.cnt != Config.start_point:
+                t1 = time.time()
+                print(str(model.cnt) +
+                      " Freq L1loss voc",
+                      format((sum(freq_voc_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
+                      " Freq L1loss bac",
+                      format((sum(freq_bac_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
+                      " Freq conserv-loss",
+                      format((sum(freq_cons_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
+                      " lr:", optimizer.param_groups[0]['lr'],
+                      " speed:", format((Config.frame_length * Config.batch_size) / (t1 - t0), '.2f'))
+                freq_voc_loss_cache = []
+                freq_bac_loss_cache = []
+                freq_cons_loss_cache = []
+            t0 = time.time()
+            train(
+                target_background=background,
+                target_vocal=vocal,
+                target_song=song)
+            background, vocal, song, name = pref.next()
+            if model.cnt > 100:
+                scheduler.step(1)
+            model.cnt += 1
+        end = time.time()
+        print("Epoch " + str(epoch) + " finish, total time: " + str(end - start))
+    else:
+        for background, vocal, song, name in dl:
+            if model.cnt % Config.validation_interval == 0 and model.cnt != Config.start_point:
+                save_and_validate()
+            if model.cnt % Config.every_n == 0 and model.cnt != Config.start_point:
+                t1 = time.time()
+                print(str(model.cnt) +
+                      " Freq L1loss voc",
+                      format((sum(freq_voc_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
+                      " Freq L1loss bac",
+                      format((sum(freq_bac_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
+                      " Freq conserv-loss",
+                      format((sum(freq_cons_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
+                      " lr:", optimizer.param_groups[0]['lr'],
+                      " speed:", format((Config.frame_length * Config.batch_size) / (t1 - t0), '.2f'))
+                freq_voc_loss_cache = []
+                freq_bac_loss_cache = []
+                freq_cons_loss_cache = []
+            t0 = time.time()
+            train(
+                target_background=background,
+                target_vocal=vocal,
+                target_song=song)
+            if model.cnt > 100:
+                scheduler.step(1)
+            model.cnt += 1
+        end = time.time()
+        print("Epoch " + str(epoch) + " finish, total time: " + str(end - start))

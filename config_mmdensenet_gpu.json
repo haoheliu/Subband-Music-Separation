@@ -1,0 +1,45 @@
+{
+  "VALIDATION": {
+    "decrease_ratio": 0.98
+  },
+  "LOG": {
+    "show_model_structure": 1,
+    "every_n": 10
+  },
+  "SUBBAND": {
+    "number": 1
+  },
+  "MODEL": {
+    "PRE-TRAINED": {
+      "start_point": 0,
+      "load_model_path": "./saved_models/1_2020_5_27__unet_2conv_spleeter_sf610200_l1_l2_l3__BD_True_lr0001_bs4-1_fl3_ss45000_97lnu4fshift8flength32drop0split_bandTrue_4"
+    },
+    "sources": 2,
+    "model_name": "MMDenseNet"
+  },
+  "PATH": {
+    "MUSDB18_PATH": "/home/work_nfs/hhliu/workspace/datasets/musdb18hq_splited",
+    "datahub_PATH": "/home/work_nfs/hhliu/workspace/datasets/",
+    "additional_data": {
+      "additional_vocal_path": [],
+      "additional_accompaniments_path": []
+    }
+  },
+  "TRAIN": {
+    "device_str": "cuda:1",
+    "dropout": 0.2,
+    "epoches": 3000,
+    "accumulation_step": 10,
+    "frame_length": 1.5,
+    "batchsize": 2,
+    "learning_rate": {
+      "gamma_decrease": 0.97,
+      "initial": 0.001
+    },
+    "loss": [
+      "l1",
+      "l2",
+      "l3"
+    ]
+  }
+}

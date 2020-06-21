@@ -7,8 +7,7 @@ from models._mdensenet import MDenseNet
 from torch import nn
 
 
-# # torch.Size([1, 1025, 376, 2])
-class Spleeter(nn.Module):
+class dedicated_model(nn.Module):
     def __init__(self,
                  model_name,
                  device,
@@ -17,13 +16,13 @@ class Spleeter(nn.Module):
                  sources=2,
                  drop_rate = 0.1
                  ):
-        super(Spleeter, self).__init__()
-        self.source = sources
+        super(dedicated_model, self).__init__()
+        self.sources = sources
         self.model_name = model_name
         self.device = device
         self.cnt = 0
         self.sigmoid = nn.Sigmoid()
-        for channel in range(self.source):
+        for channel in range(self.sources):
             if self.model_name == "Unet-5":
                 model = UNet_5(n_channels=inchannels, n_classes=outchannels,dropout=drop_rate)
             elif self.model_name == "Unet-6":

@@ -152,10 +152,6 @@ You just need to mofidy the configuration file to personalize your experiment. T
 
 ## Citation
 
->  [1] Z. Rafii, A. Liutkus, F.-R. St¨oter, S. I. Mimilakis, and R. Bittner,
->
-> “Musdb18-hq - an uncompressed version of musdb18,” Aug.
->
-> 2019.
+>  [1] Z. Rafii, A. Liutkus, F.-R. St¨oter, S. I. Mimilakis, and R. Bittner, “Musdb18-hq - an uncompressed version of musdb18,” Aug. 2019.
 
 > [2] https://haoheliu.github.io/Channel-wise-Subband-Input/

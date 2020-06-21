@@ -1,0 +1,9 @@
+/home/work_nfs/hhliu/workspace/datasets/pure_vocal_wav/Remix干声素材/I Can't Dance (Acapella Vocals 130 BPM).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_vocal_wav/Remix干声素材/Elevation (Acapella).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_vocal_wav/Remix干声素材/Glasseater (Acapella).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_vocal_wav/Remix干声素材/Rosenrot (Acapella Vocals 115 BPM).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_vocal_wav/Remix干声素材/Levels (Acapella Version).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_vocal_wav/Remix干声素材/Upgrade U (Acapella).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_vocal_wav/Remix干声素材/Don't Let Me Down (Acapella Vocal Version BPM 120).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_vocal_wav/Remix干声素材/Diamonds (Acapella Vocals 122 BPM).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_vocal_wav/Remix干声素材/Show Me Love (Acapella DJ Tool).wav

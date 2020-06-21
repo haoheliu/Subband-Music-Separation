@@ -19,14 +19,13 @@
   },
   "PATH": {
     "MUSDB18_PATH": "/home/work_nfs/hhliu/workspace/datasets/musdb18hq_splited",
-    "datahub_PATH": "/home/work_nfs/hhliu/workspace/datasets/",
     "additional_data": {
       "additional_vocal_path": [],
       "additional_accompaniments_path": []
     }
   },
   "TRAIN": {
-    "device_str": "cuda",
+    "device_str": "cuda:2",
     "dropout": 0.2,
     "epoches": 3000,
     "accumulation_step": 10,

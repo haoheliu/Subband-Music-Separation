@@ -25,7 +25,6 @@ def find_and_build(project_root,path):
 class Config:
 
     # Data path
-    datahub_PATH = ""
     MUSDB18_PATH = ""
 
     # Model configurations
@@ -117,7 +116,6 @@ class Config:
         conf_json = load_json(path_to_config_json)
 
         # Data path
-        Config.datahub_PATH = conf_json['PATH']['datahub_PATH']
         Config.MUSDB18_PATH = conf_json['PATH']['MUSDB18_PATH']
 
         # Model configurations

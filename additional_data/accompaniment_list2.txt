@@ -1,0 +1,63 @@
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/In the Night Garden Closing Theme.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Fade国风古典(Dodie Remix).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/老母鸡之歌.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Can You Feel It.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/云村的告别.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/我要的飞翔(哼唱版).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Hello Makka Pakka!.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/罗密欧与朱丽叶.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/葬花.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/0 ( AJonnyCool Bootleg)（AJonnyCool remix）.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Falling.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Freaks.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/短笛·大王·喵帕斯.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/拥有Masbfca (广告配乐完整版).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Slapstick.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/ツィゴイネルワイゼン Op20.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Cherry Blossom.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/烟袋斜街.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/The sound of silence.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/二泉映月(二胡独奏).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/He's Looking At Us.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/猪突猛進.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/龙葵—千年等待.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Asphyxia.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/LOVE Theme from TIGA .wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/十年 吉他独秀.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/《夜色钢琴曲》kiss the rain（Cover：YIRUMA）.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/渔樵问答.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/矢野立美 - 迪迦奥特曼 - LOVE Theme from TIGA.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/ Cozi Zuehlsdorff).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/At The Edge.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/安和桥间奏（纯音乐）（Cover：群星）.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/星空物语(Guitar Instrumental).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/高山流水 (古筝独奏).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/The Pink Panther Theme.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/夜明.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/谷雨 伴奏.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Gypsophila.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/ふるさとの匂い.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/惜别.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/卡农 (十孔口琴版).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/桜道.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/知足 6610H E转Gb（Cover 五月天）.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/パティのテーマ.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/锦里.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/雪见—仙凡之旅.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/상처만.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/故乡的原风景.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Autumn rain（未修改版）.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/夜空的寂静.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/双门洞（《请回答1988》）.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Purple Passion.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Stefani Vs Junior Jac.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/市集.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/The X Files End Credits (Extended #1).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/西班牙斗牛士.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/萌芽（国家宝藏）.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/旧忆 (instrument).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Bomb A Freak.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/假如爱有天意（钢琴纯音版）.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/River Flows In You (Original Mix).wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Love Theme.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_6/Star Sky - Instrumental.wav

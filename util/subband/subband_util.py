@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@File    :   subband_util.py    
+@File    :   subband_util.py
 @Contact :   liu.8948@buckeyemail.osu.edu
 @License :   (C)Copyright 2020-2021
 
@@ -22,7 +22,8 @@ def before_forward_f(
         normalize = True
 ):
     '''
-    This function can only be used in frequency domain
+    time domain -> freq domain & subband decomposition;
+    This function can only be used in frequency domain;
     Args:
         *args: multiple raw wave inputs, format: [batchsize,channels,wave],value:[-32767,32767]
         device: torch.device
@@ -60,6 +61,7 @@ def before_forward_f(
                     f_subband = item_f_subband # add a dimension for batch
                 else:
                     f_subband = torch.cat((f_subband,item_f_subband),dim=0)
+
             res.append(f_subband)
         else:
             f_subband = None
@@ -86,6 +88,7 @@ def after_forward_f(
         normalized = True
 ):
     '''
+        freq domain -> time domain & subband synthesis;
         This function can only be used in frequency domain
         Args:
             *args: Arbitrary number of input, format:

@@ -105,7 +105,7 @@ def train(  # Time Domain
 
     target_background, target_vocal, target_song = pre_pro(target_background), pre_pro(target_vocal), pre_pro(
         target_song)
-
+    print(target_background.size())
     gt_bac, gt_voc, gt_song = before_forward_f(target_background, target_vocal, target_song,
                                                subband_num=Config.subband,
                                                device=Config.device,

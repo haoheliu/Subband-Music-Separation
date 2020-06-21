@@ -40,7 +40,7 @@ class PQMF(nn.Module):
 
         self.name = str(N) + "_" + str(M) + ".mat"
         self.ana_conv_filter = nn.Conv1d(1, out_channels=N, kernel_size=M, stride=N, bias=False)
-        data = load_mat2numpy(op.join(project_root,"filters/f_" + self.name))
+        data = load_mat2numpy(op.join(project_root,"util/subband/filters/f_" + self.name))
         data = data['f'].astype(np.float32) / N
         data = np.flipud(data.T).T
         data = np.reshape(data, (N, 1, M)).copy()
@@ -51,7 +51,7 @@ class PQMF(nn.Module):
 
         self.syn_pad = nn.ConstantPad1d((0, M // N - 1), 0)
         self.syn_conv_filter = nn.Conv1d(N, out_channels=N, kernel_size=M // N, stride=1, bias=False)
-        gk = load_mat2numpy(op.join(project_root,"filters/h_" + self.name))
+        gk = load_mat2numpy(op.join(project_root,"util/subband/filters/h_" + self.name))
         gk = gk['h'].astype(np.float32)
         gk = np.transpose(np.reshape(gk, (N, M // N, N)), (1, 0, 2)) * N
         gk = np.transpose(gk[::-1, :, :], (2, 1, 0)).copy()

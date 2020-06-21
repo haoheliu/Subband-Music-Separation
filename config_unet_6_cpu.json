@@ -19,7 +19,6 @@
   },
   "PATH": {
     "MUSDB18_PATH": "/home/work_nfs/hhliu/workspace/datasets/musdb18hq_splited",
-    "datahub_PATH": "/home/work_nfs/hhliu/workspace/datasets/",
     "additional_data": {
       "additional_vocal_path": [],
       "additional_accompaniments_path": []

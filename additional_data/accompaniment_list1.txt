@@ -1,0 +1,10 @@
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_0/기억의 상실이 더 따뜻하다.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_0/마음이 계절에 흔들리다.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_0/陽だまりにて和む猫.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_0/湖滨初晴.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_0/Hello Sunshine.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_0/Silent eyes.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_0/˖★˖.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_0/wa1c oo.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_0/chocolat.wav
+/home/work_nfs/hhliu/workspace/datasets/pure_music_wav/pure_music_0/不合亦不舍.wav

@@ -303,7 +303,7 @@ class SeparationUtil:
                     self.model.eval()
                     for ch in range(self.model.sources):
                         mask = self.model(ch, input_f)
-                        data = mask * input_f * scale
+                        data = mask * input_f
                         if (ch == 0):
                             construct_background = after_forward_f(data,
                                                                    subband_num=self.split_band,

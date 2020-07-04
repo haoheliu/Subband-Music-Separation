@@ -42,13 +42,15 @@ This is a system for voice and accompaniment separation model training. All you 
 
 ## 2. Demos
 
+You can play with some additional functions by modify the configuratoin file or use the code we provide. 
+
 - **Load pre-trained model and start training(MMDenseNet)**
 
   - Configure model structure (Already done in config_demo_pretrained.json)
 
   - Configure pretrained model path (Already done in config_demo_pretrained.json)
 
-    - ```
+    - ```json
       "PRE-TRAINED": {
         "start_point": 155700,
         "load_model_path": "./checkpoints/1_2020_5_8_MDenseNetspleeter_sf0_l1_l2_l3__BD_False_lr001_bs16-1_fl1.5_ss4500.0_87lnu4fshift8flength32drop0.1split_bandTrue_8"
@@ -63,17 +65,17 @@ This is a system for voice and accompaniment separation model training. All you 
 
 - **Separate a song (Using MMDenseNet)**
 
+  - Put the song you'd like to split in: "./evaluate/listener_todo"
+  
   - ```shell
-    python demo_separation.py
+  python demo_separation.py
     ```
-
-  - You can also put the song you'd like to split in: "./evaluate/listener_todo"
 
 - **Use additional data**
 
-  - Do configuration like this:
+  - Do configuration like below. List all the path to each of your .wav file in those txt files.
 
-    ```
+    ```json
         "additional_data": {
           "additional_vocal_path": ["addtional_data/accompaniment_list1.txt",
                                     "addtional_data/accompaniment_list2.txt"], // or more
@@ -82,13 +84,11 @@ This is a system for voice and accompaniment separation model training. All you 
         }
     ```
 
-  - List all the path to each of your .wav file in those txt files.
-
-- **Try different kind of Channel-wise subband inputs**
+- **Try different kinds of Channel-wise subband inputs**
 
   - ```json
     "SUBBAND": {
-      "number": 8 // you can also choose 1(no cws),2,4
+      "number": 8 
     },
     ```
 
@@ -96,65 +96,41 @@ This is a system for voice and accompaniment separation model training. All you 
 
 You just need to mofidy the configuration file to personalize your experiment. This section I will lead you around the variable inside the configuration file. The content inside the configuration file is shown below: 
 
-![image-20200704141619755](/Users/liuhaohe/PycharmProjects/subband-unet/pics/json-struct.png)
+<img src="/Users/liuhaohe/PycharmProjects/subband-unet/pics/json-struct.png" alt="image-20200704141619755" style="zoom:25%;" />
 
 **The function of each parameter:** 
 
 - **LOG**
-
   - **show_model_Structure**:  int, [1,0] 1: print model structure before training ; 0: not print
   - **every_n**: int, Print the average loss every "every_n" batches
-
 - **SUBBAND**
-
   - **number**: int, [1,2,4,8], How many subband you want in CWS
-
 - **MODEL**
-
   - **PRE-TRAINED**: Optional, pre-trained model path, see my example below
     - **start_point**: int
     - **load_model_path** : str
   - **sources**: 2, voice and accompaniment
   - **model_name**: str, ["Unet-5","Unet-6","MDenseNet","MMDenseNet"], the model you wanna play with
-
 - **PATH**
-
   - **MUSDB18_PATH**: str, Root path to musdb18hq dataset
   - **additional_data**: Optional, additional data infos
     - **additional_vocal_path**: list
     - **additional_accompaniment_path**: list
-
 - **TRAIN**
-
   - **device_str**: str, ['cpu','cuda','cuda:1',...], Specify the device you wanna use.
-
   - **dropout**: float
-
   - **epochs**: One epoches means 10 hours of training data
-
   - **accumulation_step**: Gradient accumilation, every "accumulation_step" we update the parameters of the model. Larger "accumulation_step" equal to bigger batchsize to some sense.
-
   - **frame_length**: Input frame length during training
-
   - **batchsize**: int
-
   - **learning_rate**
-
     - **gamma_decrease**: float, 0~1, Decay rate (exponential decay)
     - **initial**: float, Initial learning rate
-
   - **loss**: list,  ['l1','l2','l3'] or ['l2','l3']
-
-    [
-
-     "l1",   // energy conservation loss
-      "l2",   // l1-norm on accompaniment
-      "l3"    // l1-norm on vocal 
-
-    ]
-
+    -  "l1" :energy conservation los
+    - "l2" : l1-norm on accompaniments
+    - "l3" : l1-norm on vocal 
 - **VALIDATION**:
-
   - **decrease_ratio**: float,  If validation loss drop greater than "decrease_ratio", we save model and start evaluation on musdb18 datase
 
 ## 4. About the training 
@@ -165,9 +141,9 @@ You just need to mofidy the configuration file to personalize your experiment. T
 
 ## 5. About Channel-wise Subband (CWS) input
 
-![tab2](./pics/tab2.png)
+<img src="./pics/tab2.png" alt="tab2" style="zoom:33%;" />
 
-![tab3-sota](./pics/tab3-sota.png)
+<img src="./pics/tab3-sota.png" alt="tab3-sota" style="zoom:25%;" />
 
 ## Citation
 

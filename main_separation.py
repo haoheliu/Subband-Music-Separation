@@ -8,10 +8,11 @@ from util.subband.subband_util import before_forward_f
 import torch
 import time
 from util.separation_util import SeparationUtil
-import logging
+import logging as lg
 import os
 from config.mainConfig import Config
 from config.global_tool import GlobalTool
+
 
 if(len(sys.argv) <= 1):
     raise ValueError("Error: You must specify a config file, example: python xxx.py config_xxx.json")
@@ -19,9 +20,26 @@ if(len(sys.argv) <= 1):
 Config.refresh_configuration(sys.argv[1])
 GlobalTool.refresh_subband(Config.subband)
 
+lg.basicConfig(level=lg.INFO,
+                    format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                    datefmt='%a, %d %b %Y %H:%M:%S',
+                    filename= "logs/"+Config.trail_name+'.log',
+                    filemode='w')
+print("Reminder: Logging file is ","./logs/"+Config.trail_name+'.log')
+
+if(not os.path.exists(Config.MUSDB18_PATH)):
+    raise RuntimeError("Error: MUSDB18_PATH not found: ", Config.MUSDB18_PATH,". You can download MUSDB18-hq from https://zenodo.org/record/3338373#.Xu8CqS2caCM")
+else:
+    lg.info("Find musdb dataset success!")
+
 if (not os.path.exists(Config.project_root + "saved_models/" + Config.trail_name)):
     os.mkdir(Config.project_root + "saved_models/" + Config.trail_name + "/")
-    print("MakeDir: " + Config.project_root + "saved_models/" + Config.trail_name)
+    lg.info("MakeDir: " + Config.project_root + "saved_models/" + Config.trail_name)
+
+lg.info("Alias of this expriment: "+Config.trail_name)
+lg.info("Write config file at: "+ Config.project_root + "config/json/" + Config.trail_name + ".json")
+
+print("Reminder: You can modify the decrease_ratio of validation dynamically during training by changing its value in: ",Config.project_root + "config/json/" + Config.trail_name + ".json")
 
 # Cache for data
 freq_bac_loss_cache = []
@@ -47,14 +65,17 @@ if (Config.use_gpu):
 
 # MODEL
 if (not Config.start_point == 0):
-    print("Load model from ", Config.load_model_path + "/model" + str(Config.start_point) + ".pth")
+    lg.info("Load model from "+ Config.load_model_path + "/model" + str(Config.start_point) + ".pth")
     model.load_state_dict(torch.load(Config.load_model_path + "/model" + str(Config.start_point) + ".pth"))
+    lg.info("Start training from ", model.cnt, Config.model_name)
     model.cnt = Config.start_point
+else:
+    lg.info("Start training "+ Config.model_name+ " from the very beginning")
 
 if(Config.show_model_structure):
-    print(model)
+    lg.info(model)
 
-print("Start training from ", model.cnt, Config.model_name)
+
 
 # DATALOADER
 dl = torch.utils.data.DataLoader(
@@ -85,12 +106,12 @@ def save_and_validate():
                         sample_rate=Config.sample_rate,
                         project_root=Config.project_root,
                         trail_name=Config.trail_name)
-    print("Start validation process...")
+    lg.info("Start validation process...")
     try:
         validate_score = su.validate(validate_score)
     except Exception as e:
-        print("Error occured while evaluating...")
-        logging.exception(e)
+        lg.error("Error occured while evaluating...")
+        lg.exception(e)
     del su
 
 
@@ -105,7 +126,6 @@ def train(  # Time Domain
 
     target_background, target_vocal, target_song = pre_pro(target_background), pre_pro(target_vocal), pre_pro(
         target_song)
-    print(target_background.size())
     gt_bac, gt_voc, gt_song = before_forward_f(target_background, target_vocal, target_song,
                                                subband_num=Config.subband,
                                                device=Config.device,
@@ -162,10 +182,12 @@ def train(  # Time Domain
         freq_bac_loss_cache.append(freq_bac_loss)
         freq_voc_loss_cache.append(freq_voc_loss)
 
+print("Training Start!")
+print("Logging file: ","logs/"+Config.trail_name+'.log')
 
 t0 = time.time()
 for epoch in range(Config.epoches):
-    print("EPOCH: ", epoch)
+    lg.info("EPOCH: "+ str(epoch))
     start = time.time()
     if (Config.use_gpu):
         pref = dataloader.data_prefetcher(dl, device=Config.device)
@@ -175,15 +197,15 @@ for epoch in range(Config.epoches):
                 save_and_validate()
             if model.cnt % Config.every_n == 0 and model.cnt != Config.start_point:
                 t1 = time.time()
-                print(str(model.cnt) +
-                      " Freq L1loss voc",
-                      format((sum(freq_voc_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
-                      " Freq L1loss bac",
-                      format((sum(freq_bac_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
-                      " Freq conserv-loss",
-                      format((sum(freq_cons_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
-                      " lr:", optimizer.param_groups[0]['lr'],
-                      " speed:", format((Config.frame_length * Config.batch_size) / (t1 - t0), '.2f'))
+                lg.info(str(model.cnt) +
+                        " Freq L1loss voc:" +
+                        str(format((sum(freq_voc_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f')) +
+                        " Freq L1loss bac:" +
+                        str(format((sum(freq_bac_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f')) +
+                        " Freq conserv-loss:" +
+                        str(format((sum(freq_cons_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f')) +
+                        " lr:"+str(optimizer.param_groups[0]['lr']) +
+                        " speed:"+str(format((Config.frame_length * Config.batch_size) / (t1 - t0), '.2f')))
                 freq_voc_loss_cache = []
                 freq_bac_loss_cache = []
                 freq_cons_loss_cache = []
@@ -197,22 +219,22 @@ for epoch in range(Config.epoches):
                 scheduler.step(1)
             model.cnt += 1
         end = time.time()
-        print("Epoch " + str(epoch) + " finish, total time: " + str(end - start))
+        lg.info("Epoch " + str(epoch) + " finish, total time: " + str(end - start))
     else:
         for background, vocal, song, name in dl:
             if model.cnt % Config.validation_interval == 0 and model.cnt != Config.start_point:
                 save_and_validate()
             if model.cnt % Config.every_n == 0 and model.cnt != Config.start_point:
                 t1 = time.time()
-                print(str(model.cnt) +
-                      " Freq L1loss voc",
-                      format((sum(freq_voc_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
-                      " Freq L1loss bac",
-                      format((sum(freq_bac_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
-                      " Freq conserv-loss",
-                      format((sum(freq_cons_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f'),
-                      " lr:", optimizer.param_groups[0]['lr'],
-                      " speed:", format((Config.frame_length * Config.batch_size) / (t1 - t0), '.2f'))
+                lg.info(str(model.cnt) +
+                        " Freq L1loss voc:" +
+                        str(format((sum(freq_voc_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f')) +
+                        " Freq L1loss bac:" +
+                        str(format((sum(freq_bac_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f')) +
+                        " Freq conserv-loss:" +
+                        str(format((sum(freq_cons_loss_cache[-Config.every_n:]) / Config.every_n) * 10000, '.7f')) +
+                        " lr:" + str(optimizer.param_groups[0]['lr']) +
+                        " speed:" + str(format((Config.frame_length * Config.batch_size) / (t1 - t0), '.2f')))
                 freq_voc_loss_cache = []
                 freq_bac_loss_cache = []
                 freq_cons_loss_cache = []
@@ -225,4 +247,4 @@ for epoch in range(Config.epoches):
                 scheduler.step(1)
             model.cnt += 1
         end = time.time()
-        print("Epoch " + str(epoch) + " finish, total time: " + str(end - start))
+        lg.info("Epoch " + str(epoch) + " finish, total time: " + str(end - start))

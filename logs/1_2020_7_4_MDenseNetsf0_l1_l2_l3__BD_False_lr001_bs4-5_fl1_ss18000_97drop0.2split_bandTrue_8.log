@@ -1,0 +1,5 @@
+Sat, 04 Jul 2020 21:05:24 main_separation.py[line:33] INFO Find musdb dataset success!
+Sat, 04 Jul 2020 21:05:24 main_separation.py[line:39] INFO Alias of this expriment: 1_2020_7_4_MDenseNetsf0_l1_l2_l3__BD_False_lr001_bs4-5_fl1_ss18000_97drop0.2split_bandTrue_8
+Sat, 04 Jul 2020 21:05:24 main_separation.py[line:40] INFO Write config file at: /Users/liuhaohe/PycharmProjects/subband-unet/config/json/1_2020_7_4_MDenseNetsf0_l1_l2_l3__BD_False_lr001_bs4-5_fl1_ss18000_97drop0.2split_bandTrue_8.json
+Sat, 04 Jul 2020 21:05:24 main_separation.py[line:73] INFO Start training MDenseNet from the very beginning
+Sat, 04 Jul 2020 21:05:24 main_separation.py[line:190] INFO EPOCH: 0

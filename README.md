@@ -59,7 +59,7 @@ You can play with some additional functions by modify the configuratoin file or 
     ```
 
     ```java
-    *python main_separation.py config_demo_pretrained.json*
+    python main_separation.py examples/config_demo_pretrained.json
     ```
 
     

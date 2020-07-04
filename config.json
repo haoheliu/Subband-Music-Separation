@@ -3,7 +3,7 @@
     "decrease_ratio": 0.98
   },
   "LOG": {
-    "show_model_structure": 1,
+    "show_model_structure": 0,
     "every_n": 10
   },
   "SUBBAND": {
@@ -18,7 +18,7 @@
     "model_name": "MDenseNet"
   },
   "PATH": {
-    "MUSDB18_PATH": "/home/work_nfs/hhliu/workspace/datasets/musdb18hq_splited",
+    "MUSDB18_PATH": "/Users/liuhaohe/College/Experiments/music separation/outputs/listener/musdb18hq_splited",
     "additional_data": {
       "additional_vocal_path": [],
       "additional_accompaniments_path": []

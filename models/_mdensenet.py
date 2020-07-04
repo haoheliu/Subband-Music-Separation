@@ -156,12 +156,3 @@ def get_parameter_number(net):
     total_num = sum(p.numel() for p in net.parameters())
     trainable_num = sum(p.numel() for p in net.parameters() if p.requires_grad)
     return {'Total': total_num, 'Trainable': trainable_num}
-
-#
-# kl_low = [(14,4), (16,4), (16,4), (16,4), (16,4), (16,4), (10, 4)]
-#
-# a = torch.randn(1,16,300,100)
-# model = MDenseNet(in_channel=16,out_channel=16)
-# # print(model)
-# # print(model(a).size())
-# print(get_parameter_number(model))

@@ -12,6 +12,7 @@
 
 import pickle
 import json
+import logging
 
 def save_pickle(obj,fname):
     print("Save pickle at "+fname)

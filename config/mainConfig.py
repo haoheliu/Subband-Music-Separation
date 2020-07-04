@@ -57,8 +57,6 @@ class Config:
     # loss conponents
     loss_component = ['l1','l2','l3']
 
-
-
     # Additional data
     ## vocal data
     additional_vocal_data = [
@@ -67,7 +65,7 @@ class Config:
     ### background data
     additional_accompaniment_data = [
     ]
-
+    trail_name = "Temp"
     # TRAIN
     every_n = 10
     show_model_structure = True
@@ -114,6 +112,14 @@ class Config:
     @classmethod
     def refresh_configuration(cls,path_to_config_json):
         conf_json = load_json(path_to_config_json)
+
+        find_and_build(Config.project_root,"outputs")
+        find_and_build(Config.project_root,"outputs/listener")
+        find_and_build(Config.project_root,"outputs/musdb_test")
+        find_and_build(Config.project_root,"saved_models")
+        find_and_build(Config.project_root, "logs")
+        find_and_build(Config.project_root,"config/json")
+        find_and_build(Config.project_root,"evaluate/listener_todo")
 
         # Data path
         Config.MUSDB18_PATH = conf_json['PATH']['MUSDB18_PATH']
@@ -224,7 +230,7 @@ class Config:
                       + "drop" + str(Config.drop_rate) \
                       + "split_band" + str(Config.split_band) + "_" + str(Config.subband)
         # +"emptyN"+str(empty_every_n)\
-        print("Write config file at: ", Config.project_root + "config/json/" + Config.trail_name + ".json")
+
         write_json(Config.conf, Config.project_root + "config/json/" + Config.trail_name + ".json")
 
         Config.conf['model_name'] = Config.model_name
@@ -240,10 +246,5 @@ class Config:
         Config.conf['frame_length'] = Config.frame_length
         Config.conf['drop_rate'] = Config.drop_rate
 
-        find_and_build(Config.project_root,"outputs")
-        find_and_build(Config.project_root,"outputs/listener")
-        find_and_build(Config.project_root,"outputs/musdb_test")
-        find_and_build(Config.project_root,"saved_model")
-        find_and_build(Config.project_root,"config/json")
-        find_and_build(Config.project_root,"evaluate/listener_todo")
+
 

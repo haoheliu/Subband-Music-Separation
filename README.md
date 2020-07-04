@@ -1,6 +1,6 @@
 # Subband Music Separation
 
-This is a system for voice and accompaniment separation model training. All you need to do is configure environment, download training data and enjoy your training! If you need personalize your training, you just need to modify the configuration file (json), we also provide many examples. This repo also integrate the subband decomposation and synthesis tools mentioned in our paper: [link](https://haoheliu.github.io/Channel-wise-Subband-Input/resources/paper/Paper-Channel-wise%20Subband%20Input%20for%20Better%20Voice%20and%20Accompaniment%20Separation%20on%20High%20Resolution%20Music.pdf) 
+This is a system for voice and accompaniment separation model training. All you need to do is configure environment, download training data and enjoy your training! If you need personalize your training, you just need to modify the configurationjson file. We also provide some examples. This repo also integrate the subband decomposation and synthesis tools mentioned in our paper: [link](https://haoheliu.github.io/Channel-wise-Subband-Input/resources/paper/Paper-Channel-wise%20Subband%20Input%20for%20Better%20Voice%20and%20Accompaniment%20Separation%20on%20High%20Resolution%20Music.pdf) 
 
 - You can use MUSDB18 **[1]** as well as the data you have
 
@@ -25,20 +25,21 @@ This is a system for voice and accompaniment separation model training. All you 
 
   >  https://zenodo.org/record/3338373#.Xu8CqS2caCM
 
-  Note that you can also use your own data.
+  Note: You can also use your own data, see: [link](#additional-data)
 
 - Next we configure the path to MUSDB18 dataset
 
-  - We open the config.json (or other config file you like)
-  - Modify the "MUSDB18_PATH" variable
-    - e.g.: "/home/work_nfs/hhliu/workspace/datasets/musdb18hq_splited"
+  - We open the [config.json](#Config) (or other config file you like)
+  - Modify the "MUSDB18_PATH" variable; e.g.: "/home/work_nfs/hhliu/workspace/datasets/musdb18hq_splited"
   - Save file
 
 - Finanlly let training! 
 
-  ```shell
+  ```java
   python main_separation.py config.json
   ```
+
+  
 
 ## 2. Demos
 
@@ -46,57 +47,61 @@ You can play with some additional functions by modify the configuratoin file or 
 
 - **Load pre-trained model and start training(MMDenseNet)**
 
-  - Configure model structure (Already done in config_demo_pretrained.json)
+  - Configure model structure (*examples/config_demo_pretrained.json*)
 
-  - Configure pretrained model path (Already done in config_demo_pretrained.json)
+  - Configure pretrained model path (*examples/config_demo_pretrained.json*)
 
-    - ```json
-      "PRE-TRAINED": {
-        "start_point": 155700,
-        "load_model_path": "./checkpoints/1_2020_5_8_MDenseNetspleeter_sf0_l1_l2_l3__BD_False_lr001_bs16-1_fl1.5_ss4500.0_87lnu4fshift8flength32drop0.1split_bandTrue_8"
-      },
-      ```
+    ```json
+    "PRE-TRAINED": {
+      "start_point": 155700,
+      "load_model_path": "./checkpoints/1_2020_5_8_MDenseNetspleeter_sf0_l1_l2_l3__BD_False_lr001_bs16-1_fl1.5_ss4500.0_87lnu4fshift8flength32drop0.1split_bandTrue_8"
+    },
+    ```
 
-  - run and enjoy! 
+    ```java
+    *python main_separation.py config_demo_pretrained.json*
+    ```
 
-    - ```shell
-      python main_separation.py config_demo_pretrained.json
-      ```
+    
 
 - **Separate a song (Using MMDenseNet)**
 
   - Put the song you'd like to split in: "./evaluate/listener_todo"
-  
-  - ```shell
-  python demo_separation.py
+
+    ```java
+    python demo_separation.py
     ```
 
-- **Use additional data**
+    
+
+- <span id='additional-data'>**Use additional data**</span> 
 
   - Do configuration like below. List all the path to each of your .wav file in those txt files.
 
     ```json
         "additional_data": {
           "additional_vocal_path": ["addtional_data/accompaniment_list1.txt",
-                                    "addtional_data/accompaniment_list2.txt"], // or more
+                                    "addtional_data/accompaniment_list2.txt"], 
           "additional_accompaniments_path": ["addtional_data/vocal_list1.txt",
-                                             "addtional_data/vocal_list2.txt"] // or more
+                                             "addtional_data/vocal_list2.txt"] 
         }
     ```
 
 - **Try different kinds of Channel-wise subband inputs**
 
-  - ```json
+  - Modify the "SUBBAND-number" parameter, the value you can choose is 1,2,4,8
+  
+    ```json
     "SUBBAND": {
       "number": 8 
     },
     ```
 
-## 3. About the config file
+<h2 id="Config">3. About the config file</h2>
 
 You just need to mofidy the configuration file to personalize your experiment. This section I will lead you around the variable inside the configuration file. The content inside the configuration file is shown below: 
 
-<img src="/Users/liuhaohe/PycharmProjects/subband-unet/pics/json-struct.png" alt="image-20200704141619755" style="zoom:25%;" />
+<img src="./pics/json-struct.png" alt="image-20200704141619755" style="zoom:25%;" />
 
 **The function of each parameter:** 
 
@@ -144,6 +149,8 @@ You just need to mofidy the configuration file to personalize your experiment. T
 <img src="./pics/tab2.png" alt="tab2" style="zoom:33%;" />
 
 <img src="./pics/tab3-sota.png" alt="tab3-sota" style="zoom:25%;" />
+
+
 
 ## Citation
 

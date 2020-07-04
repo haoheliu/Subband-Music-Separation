@@ -12,7 +12,7 @@ This is a system for voice and accompaniment separation model training. All you 
 
 ![subband](./pics/subband.png)
 
-## Quick start
+## 1. Quick start
 
 - First we configure the code running environments
 
@@ -40,7 +40,7 @@ This is a system for voice and accompaniment separation model training. All you 
   python main_separation.py config.json
   ```
 
-## Demos
+## 2. Demos
 
 - **Load pre-trained model and start training(MMDenseNet)**
 
@@ -86,73 +86,84 @@ This is a system for voice and accompaniment separation model training. All you 
 
 - **Try different kind of Channel-wise subband inputs**
 
-  - ```
+  - ```json
     "SUBBAND": {
       "number": 8 // you can also choose 1(no cws),2,4
     },
     ```
 
-## About the config file
+## 3. About the config file
 
-You just need to mofidy the configuration file to personalize your experiment. This section I will lead you around the variable inside the configuration file.
+You just need to mofidy the configuration file to personalize your experiment. This section I will lead you around the variable inside the configuration file. The content inside the configuration file is shown below: 
 
-```
-{
-  "LOG": {
-    "show_model_structure": 1, // 1: print model structure; 0: not print
-    "every_n": 10 // print average loss every "every_n" batches
-  },
-  "SUBBAND": {
-    "number": 8 // how many subband you want in CWS
-  },
-  "MODEL": {
-    "PRE-TRAINED": { // optional, pre-trained model path, see my example below
-      "start_point": 0, 
-      "load_model_path": ""
-    },
-    "sources": 2, // voice and accompaniment
-    "model_name": "Unet-6" // choice: ["Unet-5","Unet-6","MDenseNet","MMDenseNet"]
-  },
-  
-  "PATH": {
-    "MUSDB18_PATH": "/home/work_nfs/hhliu/workspace/datasets/musdb18hq_splited", // path to musdb18hq dataset
-    "additional_data": { // optional, additional data infos
-      "additional_vocal_path": [],
-      "additional_accompaniments_path": []
-    }
-  },
-  "TRAIN": {
-    "device_str": "cuda:2", // device, ['cpu','cuda','cuda:1',...]
-    "dropout": 0.2, // dropout_rate
-    "epoches": 3000, // one epoches means 10 hours of training data
-    "accumulation_step": 10, // gradient accumilation, every "accumulation_step" we update the parameters of the model. Larger "accumulation_step" equal to bigger batchsize to some sense.
-    "frame_length": 3, // input frame length
-    "batchsize": 4, 
-    "learning_rate": { // exponential decay
-      "gamma_decrease": 0.97, // decay rate
-      "initial": 0.001 // initial learning rate
-    },
-    "loss": [ // loss function, choice: ['l1','l2','l3'] or ['l2','l3']
-      "l1",   // energy conservation loss
+![image-20200704141619755](/Users/liuhaohe/PycharmProjects/subband-unet/pics/json-struct.png)
+
+**The function of each parameter:** 
+
+- **LOG**
+
+  - **show_model_Structure**:  int, [1,0] 1: print model structure before training ; 0: not print
+  - **every_n**: int, Print the average loss every "every_n" batches
+
+- **SUBBAND**
+
+  - **number**: int, [1,2,4,8], How many subband you want in CWS
+
+- **MODEL**
+
+  - **PRE-TRAINED**: Optional, pre-trained model path, see my example below
+    - **start_point**: int
+    - **load_model_path** : str
+  - **sources**: 2, voice and accompaniment
+  - **model_name**: str, ["Unet-5","Unet-6","MDenseNet","MMDenseNet"], the model you wanna play with
+
+- **PATH**
+
+  - **MUSDB18_PATH**: str, Root path to musdb18hq dataset
+  - **additional_data**: Optional, additional data infos
+    - **additional_vocal_path**: list
+    - **additional_accompaniment_path**: list
+
+- **TRAIN**
+
+  - **device_str**: str, ['cpu','cuda','cuda:1',...], Specify the device you wanna use.
+
+  - **dropout**: float
+
+  - **epochs**: One epoches means 10 hours of training data
+
+  - **accumulation_step**: Gradient accumilation, every "accumulation_step" we update the parameters of the model. Larger "accumulation_step" equal to bigger batchsize to some sense.
+
+  - **frame_length**: Input frame length during training
+
+  - **batchsize**: int
+
+  - **learning_rate**
+
+    - **gamma_decrease**: float, 0~1, Decay rate (exponential decay)
+    - **initial**: float, Initial learning rate
+
+  - **loss**: list,  ['l1','l2','l3'] or ['l2','l3']
+
+    [
+
+     "l1",   // energy conservation loss
       "l2",   // l1-norm on accompaniment
-      "l3"    // l1-norm on vocal
+      "l3"    // l1-norm on vocal 
+
     ]
-  }
-  "VALIDATION": {
-    "decrease_ratio": 0.98 // If validation loss drop greater than "decrease_ratio", we save model and start evaluation on musdb18 dataset
-  },
-}
-```
 
+- **VALIDATION**:
 
+  - **decrease_ratio**: float,  If validation loss drop greater than "decrease_ratio", we save model and start evaluation on musdb18 datase
 
-## About the training 
+## 4. About the training 
 
 - We will save model in "saved_modes/"
 - We will save separation results in output 
 - The wav files inside "evaluate/listener_todo" are considered songs to be splitted. (separation_util.py: SeparationUtil.split_listener())
 
-## About Channel-wise Subband (CWS) input
+## 5. About Channel-wise Subband (CWS) input
 
 ![tab2](./pics/tab2.png)
 

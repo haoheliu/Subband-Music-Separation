@@ -5,7 +5,7 @@ I wrote a script on google colab. It's a demo for my **subband related code** wi
 
 # Subband Music Separation
 
-This is a system for voice and accompaniment separation model training. All you need to do is configure environment, download training data and enjoy your training! If you need personalize your training, you just need to modify the configurationjson file. We also provide some examples. This repo also integrate the subband decomposation and synthesis tools mentioned in our paper: [link](https://haoheliu.github.io/Channel-wise-Subband-Input/resources/paper/Paper-Channel-wise%20Subband%20Input%20for%20Better%20Voice%20and%20Accompaniment%20Separation%20on%20High%20Resolution%20Music.pdf) 
+This is a system for voice and accompaniment separation model training. All you need to do is configure environment, download training data and enjoy your training! If you need personalize your training, you just need to modify the configurationjson file. We also provide some examples. This repo also integrate the subband decomposation and synthesis tools mentioned in our paper: [link](https://arxiv.org/abs/2008.05216) 
 
 - You can use MUSDB18 **[1]** as well as the data you have
 

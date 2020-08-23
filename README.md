@@ -8,14 +8,14 @@ I wrote a script on google colab. It's a demo for my **subband related code** wi
 
 If you find our code useful for your research, please consider citing:
 
-  @misc{liu2020channelwise,
-      title={Channel-wise Subband Input for Better Voice and Accompaniment Separation on High Resolution Music},
-      author={Haohe Liu and Lei Xie and Jian Wu and Geng Yang},
-      year={2020},
-      eprint={2008.05216},
-      archivePrefix={arXiv},
-      primaryClass={eess.AS}
-  }
+>        @misc{liu2020channelwise,  
+>            title={Channel-wise Subband Input for Better Voice and Accompaniment Separation on High Resolution Music},  
+>            author={Haohe Liu and Lei Xie and Jian Wu and Geng Yang},  
+>            year={2020},  
+>            eprint={2008.05216},  
+>            archivePrefix={arXiv},  
+>            primaryClass={eess.AS}. 
+>        }. 
 
 
 # Subband Music Separation

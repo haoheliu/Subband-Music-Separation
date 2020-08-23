@@ -3,6 +3,21 @@ I wrote a script on google colab. It's a demo for my **subband related code** wi
 
 > https://colab.research.google.com/drive/1n2ed4ucPEqTTV4MVa-FXyLzeDweBIoex?usp=sharing
 
+
+## Citation
+
+If you find our code useful for your research, please consider citing:
+
+  @misc{liu2020channelwise,
+      title={Channel-wise Subband Input for Better Voice and Accompaniment Separation on High Resolution Music},
+      author={Haohe Liu and Lei Xie and Jian Wu and Geng Yang},
+      year={2020},
+      eprint={2008.05216},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS}
+  }
+
+
 # Subband Music Separation
 
 This is a system for voice and accompaniment separation model training. All you need to do is configure environment, download training data and enjoy your training! If you need personalize your training, you just need to modify the configurationjson file. We also provide some examples. This repo also integrate the subband decomposation and synthesis tools mentioned in our paper: [link](https://arxiv.org/abs/2008.05216) 

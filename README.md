@@ -3,6 +3,7 @@ I wrote a script on google colab. It's a demo for my **subband related code** wi
 
 > https://colab.research.google.com/drive/1n2ed4ucPEqTTV4MVa-FXyLzeDweBIoex?usp=sharing
 
+<img src="./pics/colab.png" alt="colab" style="zoom:33%;" />
 
 ## Citation
 

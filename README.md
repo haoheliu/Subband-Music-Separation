@@ -1,4 +1,4 @@
-# Update on 2020.08.08
+# Update on 2021.02
 I wrote a script on google colab. It's a demo for my **subband related code** with detailed comment and visualization. Come and check it out!
 
 > https://colab.research.google.com/drive/1n2ed4ucPEqTTV4MVa-FXyLzeDweBIoex?usp=sharing

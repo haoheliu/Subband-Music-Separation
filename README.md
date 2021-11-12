@@ -1,3 +1,6 @@
+# Update on 2021.11
+Please checkout our latest MSS repo: https://github.com/haoheliu/2021-ISMIR-MSS-Challenge-CWS-PResUNet. It has much better performance.
+
 # Update on 2021.09
 
 Here is the package **torchsubband** I wrote for subband decomposition.
